@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REXX MARKET HOSTING - Panel Provider</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- ===== IMPORT FILE DEVELOPER (PISAH) ===== -->
+    <script src="developer-config.js"></script>
+    <script src="developer-products.js"></script>
+    <script src="developer-users.js"></script>
+    <script src="developer-settings.js"></script>
+    <script src="developer-panel.js"></script>
+    
+    <style>
+        /* ===== STYLE SAMA SEPERTI SEBELUMNYA ===== */
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            scrollbar-width: thin;
+            scrollbar-color: #2563eb #f0f4ff;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f0f4ff; }
+        ::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 4px; }
+
+        body {
+            background: #f0f4ff;
+            color: #0f172a;
+        }
+
+        .bg-glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(37, 99, 235, 0.08);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #eff6ff 0%, #ffffff 40%, #dbeafe 70%, #eff6ff 100%);
+            border-bottom: 1px solid rgba(37, 99, 235, 0.06);
+        }
+
+        .product-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.04);
+        }
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #2563eb, #60a5fa, #93c5fd, #2563eb);
+            background-size: 200% 100%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .product-card:hover::before {
+            opacity: 1;
+            animation: gradientMove 2s linear infinite;
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            border-color: #2563eb;
+            box-shadow: 0 12px 40px rgba(37, 99, 235, 0.1);
+        }
+
+        .spec-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 10px;
+            background: #f0f7ff;
+            border-radius: 8px;
+            border: 1px solid rgba(37, 99, 235, 0.06);
+        }
+        .spec-item i { width: 20px; font-size: 14px; color: #2563eb; }
+        .spec-item .label { color: #64748b; font-size: 11px; font-weight: 500; }
+        .spec-item .value { color: #0f172a; font-size: 12px; font-weight: 700; margin-left: auto; }
+
+        .price-tag { font-size: 20px; font-weight: 800; color: #2563eb; }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #3b82f6, #60a5fa);
+            background-size: 200% 200%;
+            animation: btnGradient 3s ease infinite;
+            color: white;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 12px;
+            border: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+        }
+        @keyframes btnGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.3);
+        }
+
+        .checkout-btn {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            font-weight: 700;
+            font-size: 12px;
+            padding: 10px 0;
+            border-radius: 10px;
+            border: none;
+            width: 100%;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15);
+        }
+        .checkout-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.25);
+        }
+        .checkout-btn i { margin-right: 8px; }
+
+        .profile-photo {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 22px;
+            color: white;
+            flex-shrink: 0;
+            user-select: none;
+            border: 2px solid rgba(37, 99, 235, 0.15);
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.1);
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #2563eb, #60a5fa, #93c5fd);
+            background-size: 300% 300%;
+            animation: gradientBG 4s ease infinite;
+            overflow: hidden;
+        }
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* APP ICONS - CIRCULAR ROTATION */
+        .app-orbital-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            height: 400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .app-orbital-container .center-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 0 40px rgba(37, 99, 235, 0.2);
+            z-index: 2;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .app-orbital {
+            position: absolute;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            animation: orbitRotate 12s linear infinite;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .app-orbital:hover {
+            transform: scale(1.2);
+            z-index: 10;
+            animation-play-state: paused;
+        }
+        .app-orbital:nth-child(1) { background: #25D366; animation-delay: 0s; }
+        .app-orbital:nth-child(2) { background: #26A5E4; animation-delay: 1s; }
+        .app-orbital:nth-child(3) { background: #5865F2; animation-delay: 2s; }
+        .app-orbital:nth-child(4) { background: #4A154B; animation-delay: 3s; }
+        .app-orbital:nth-child(5) { background: #00C300; animation-delay: 4s; }
+        .app-orbital:nth-child(6) { background: #3A76F0; animation-delay: 5s; }
+        .app-orbital:nth-child(7) { background: #181717; animation-delay: 6s; }
+        .app-orbital:nth-child(8) { background: #FC6D26; animation-delay: 7s; }
+        .app-orbital:nth-child(9) { background: #00758F; animation-delay: 8s; }
+        .app-orbital:nth-child(10) { background: #DC382D; animation-delay: 9s; }
+        .app-orbital:nth-child(11) { background: #00A3E0; animation-delay: 10s; }
+        .app-orbital:nth-child(12) { background: #00BFA6; animation-delay: 11s; }
+
+        @keyframes orbitRotate {
+            0% { transform: rotate(0deg) translateX(160px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(160px) rotate(-360deg); }
+        }
+        @media (max-width: 640px) {
+            .app-orbital-container { height: 320px; }
+            .app-orbital { width: 40px; height: 40px; font-size: 18px; }
+            @keyframes orbitRotate {
+                0% { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+                100% { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+            }
+        }
+
+        .product-grid-3col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .product-grid-3col { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .product-grid-3col { grid-template-columns: 1fr; }
+        }
+
+        .marquee-container {
+            background: linear-gradient(90deg, #1e3a5f, #1e40af, #1e3a5f);
+            padding: 10px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .marquee-container::before,
+        .marquee-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 60px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .marquee-container::before {
+            left: 0;
+            background: linear-gradient(90deg, #1e3a5f, transparent);
+        }
+        .marquee-container::after {
+            right: 0;
+            background: linear-gradient(270deg, #1e3a5f, transparent);
+        }
+        .marquee-track {
+            display: flex;
+            animation: marquee 25s linear infinite;
+            width: max-content;
+        }
+        .marquee-track:hover { animation-play-state: paused; }
+        .marquee-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 30px;
+            white-space: nowrap;
+            font-size: 13px;
+            color: #93c5fd;
+            font-weight: 400;
+        }
+        .marquee-item i { color: #60a5fa; font-size: 16px; }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            padding: 14px 24px;
+            border-radius: 12px;
+            color: white;
+            font-size: 13px;
+            max-width: 350px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            animation: slideUp 0.3s ease;
+            font-weight: 600;
+        }
+        .toast-success { background: linear-gradient(135deg, #22c55e, #10b981); }
+        .toast-error { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .toast-info { background: linear-gradient(135deg, #3b82f6, #6366f1); }
+        .toast-warning { background: linear-gradient(135deg, #f59e0b, #f97316); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden { display: none !important; }
+        .modal-overlay {
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            max-width: 500px;
+            width: 92%;
+            max-height: 90vh;
+            overflow-y: auto;
+            color: #0f172a;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        .modal-content h3 { color: #0f172a; font-weight: 700; }
+        .modal-content input,
+        .modal-content select,
+        .modal-content textarea {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: #0f172a;
+            font-size: 13px;
+            width: 100%;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .modal-content input:focus,
+        .modal-content select:focus,
+        .modal-content textarea:focus {
+            border-color: #2563eb;
+        }
+        .modal-content label {
+            color: #64748b;
+            font-size: 11px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .btn-save-individual {
+            background: #eff6ff;
+            border: 1px solid #93c5fd;
+            color: #2563eb;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-save-individual:hover {
+            background: #dbeafe;
+            border-color: #2563eb;
+        }
+
+        .settings-section {
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 16px;
+            margin-bottom: 16px;
+        }
+        .settings-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        .status-dot.online { background: #22c55e; animation: pulse 2s infinite; }
+        .status-dot.offline { background: #ef4444; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #0f172a;
+        }
+        .section-title .gradient-text {
+            background: linear-gradient(135deg, #2563eb, #3b82f6, #60a5fa, #93c5fd);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientText 4s ease infinite;
+        }
+        @keyframes gradientText {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .section-subtitle { color: #64748b; font-size: 14px; }
+
+        .badge-ready {
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 9px;
+            padding: 2px 12px;
+            border-radius: 20px;
+            border: 1px solid #93c5fd;
+        }
+        .badge-panel {
+            color: #2563eb;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        @media (max-width: 640px) {
+            .guide-grid { grid-template-columns: 1fr; }
+        }
+        .guide-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .guide-item:hover {
+            border-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.06);
+        }
+        .guide-item .icon {
+            font-size: 28px;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .guide-item .step {
+            font-weight: 700;
+            color: #0f172a;
+            font-size: 14px;
+        }
+        .guide-item .desc {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        /* Developer Panel - Tabs */
+        .dev-tab {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .dev-tab button {
+            padding: 8px 20px;
+            border-radius: 8px 8px 0 0;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .dev-tab button:hover {
+            color: #2563eb;
+            background: #f0f7ff;
+        }
+        .dev-tab button.active {
+            color: #2563eb;
+            background: #eff6ff;
+            border-bottom: 3px solid #2563eb;
+        }
+        .dev-panel {
+            display: none;
+        }
+        .dev-panel.active {
+            display: block;
+        }
+
+        .user-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+        .user-list-item .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .user-list-item .user-info .name {
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .user-list-item .user-info .detail {
+            color: #64748b;
+            font-size: 10px;
+        }
+        .user-list-item .user-badge {
+            background: #eff6ff;
+            color: #2563eb;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+        .user-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .user-stats .stat-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+        .user-stats .stat-card .number {
+            font-size: 22px;
+            font-weight: 800;
+            color: #2563eb;
+        }
+        .user-stats .stat-card .label {
+            font-size: 10px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Password Change Section */
+        .password-section {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+        .password-section .title {
+            color: #dc2626;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .password-section .title i {
+            margin-right: 8px;
+        }
+        .password-section input {
+            background: white;
+            border: 2px solid #fca5a5;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12px;
+            width: 100%;
+            outline: none;
+            transition: 0.2s;
+        }
+        .password-section input:focus {
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+        .password-section .btn-change-password {
+            background: #dc2626;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+            margin-top: 8px;
+        }
+        .password-section .btn-change-password:hover {
+            background: #b91c1c;
+        }
+        .password-section .btn-change-password:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .password-hint {
+            font-size: 10px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+        .password-hint i {
+            margin-right: 4px;
+        }
+        
+        .product-category-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 9px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        .category-starter { background: #dbeafe; color: #1e40af; }
+        .category-business { background: #d1fae5; color: #065f46; }
+        .category-premium { background: #fef3c7; color: #92400e; }
+        .category-umum { background: #f3e8ff; color: #6d28d9; }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="bg-glass sticky top-0 z-40 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex justify-between items-center flex-wrap gap-2">
+            <div class="flex items-center gap-3">
+                <div class="profile-photo" id="headerProfilePhoto">R</div>
+                <div>
+                    <h1 class="text-xl font-extrabold tracking-tight text-slate-900" id="headerStoreName">REXX <span style="color:#2563eb;">MARKET</span></h1>
+                    <p class="text-[10px] text-slate-500 font-mono tracking-widest uppercase" id="headerTagline">Hosting • Panel Provider</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-xs text-slate-500 hidden sm:inline"><span class="status-dot online"></span> All systems ready</span>
+                <button id="btnDevAccess" class="text-xs text-slate-500 hover:text-slate-900 px-3 py-2 rounded-xl border border-slate-200 transition hover:border-blue-300">
+                    <i class="fas fa-cog mr-1"></i> Dev
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MARQUEE -->
+    <div class="marquee-container">
+        <div class="marquee-track" id="marqueeTrack"></div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero-gradient relative overflow-hidden py-12 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-4">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold">
+                        <span class="w-2 h-2 rounded-full bg-blue-500 animate-ping"></span> PERFORMANCE & RELIABILITY
+                    </div>
+                    <h1 class="text-3xl md:text-4xl font-black text-slate-900 leading-tight">
+                        Panel <span class="gradient-text">WhatsApp</span> & <span class="gradient-text">Telegram</span>
+                    </h1>
+                    <p class="text-slate-500 text-sm max-w-lg">Solusi panel bot berkecepatan tinggi dengan uptime 99.9% dan performa optimal.</p>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="document.getElementById('productGrid').scrollIntoView({behavior:'smooth'})" class="btn-primary text-sm">
+                            <i class="fas fa-rocket mr-2"></i> Lihat Paket
+                        </button>
+                        <button onclick="promptDevAccess()" class="px-5 py-2.5 rounded-xl border-2 border-slate-200 font-semibold text-slate-700 hover:border-blue-400 hover:bg-blue-50 transition text-sm">
+                            <i class="fas fa-headset mr-2"></i> Hubungi Developer
+                        </button>
+                    </div>
+                </div>
+                <div class="app-orbital-container">
+                    <div class="center-icon"><i class="fas fa-rocket"></i></div>
+                    <div class="app-orbital"><i class="fab fa-whatsapp"></i></div>
+                    <div class="app-orbital"><i class="fab fa-telegram"></i></div>
+                    <div class="app-orbital"><i class="fab fa-discord"></i></div>
+                    <div class="app-orbital"><i class="fab fa-slack"></i></div>
+                    <div class="app-orbital"><i class="fab fa-line"></i></div>
+                    <div class="app-orbital"><i class="fab fa-signal"></i></div>
+                    <div class="app-orbital"><i class="fab fa-github"></i></div>
+                    <div class="app-orbital"><i class="fab fa-gitlab"></i></div>
+                    <div class="app-orbital"><i class="fas fa-database"></i></div>
+                    <div class="app-orbital"><i class="fas fa-server"></i></div>
+                    <div class="app-orbital"><i class="fas fa-cloud"></i></div>
+                    <div class="app-orbital"><i class="fas fa-shield-alt"></i></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCTS - 3 KOLOM -->
+    <section class="max-w-7xl mx-auto px-6 py-12">
+        <div class="flex justify-between items-end mb-6">
+            <div>
+                <h2 class="section-title">Pilih <span class="gradient-text">Paket Panel</span></h2>
+                <p class="section-subtitle mt-1">15 Paket tersedia dengan spesifikasi mumpuni</p>
+            </div>
+        </div>
+        <div id="productGrid" class="product-grid-3col"></div>
+    </section>
+
+    <!-- PANDUAN CARA ISI -->
+    <section class="max-w-7xl mx-auto px-6 py-8 border-t border-slate-200">
+        <div class="text-center mb-6">
+            <h2 class="section-title text-2xl">📖 Panduan <span class="gradient-text">Cara Isi</span></h2>
+            <p class="text-slate-500 text-sm mt-2">Panduan lengkap mengisi data di Developer Panel</p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-6">
+            <!-- Panduan Produk -->
+            <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <h3 class="font-bold text-blue-600 text-lg mb-3">
+                    <i class="fas fa-box mr-2"></i> Panduan Produk
+                </h3>
+                <ul class="space-y-2 text-sm text-slate-600">
+                    <li><span class="font-semibold text-slate-800">Nama Produk</span> - Nama paket (contoh: Paket Starter 1)</li>
+                    <li><span class="font-semibold text-slate-800">Harga</span> - Format Rp X.XXX (contoh: Rp 5.000)</li>
+                    <li><span class="font-semibold text-slate-800">RAM</span> - Kapasitas RAM dalam GB</li>
+                    <li><span class="font-semibold text-slate-800">DISK</span> - Kapasitas penyimpanan dalam GB</li>
+                    <li><span class="font-semibold text-slate-800">CPU</span> - Alokasi CPU dalam persen (%)</li>
+                    <li><span class="font-semibold text-slate-800">Deskripsi</span> - Penjelasan singkat produk</li>
+                    <li><span class="font-semibold text-slate-800">Kategori</span> - Starter / Business / Premium</li>
+                </ul>
+                <div class="mt-3 p-3 bg-blue-50 rounded-lg text-xs text-blue-700">
+                    <i class="fas fa-lightbulb mr-1"></i> <b>Tips:</b> Gunakan kategori untuk mengelompokkan produk
+                </div>
+            </div>
+
+            <!-- Panduan User -->
+            <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <h3 class="font-bold text-green-600 text-lg mb-3">
+                    <i class="fas fa-users mr-2"></i> Panduan User
+                </h3>
+                <ul class="space-y-2 text-sm text-slate-600">
+                    <li><span class="font-semibold text-slate-800">Username</span> - Nama unik untuk login (min 3 karakter)</li>
+                    <li><span class="font-semibold text-slate-800">Password</span> - Minimal 4 karakter</li>
+                    <li><span class="font-semibold text-slate-800">Nama Lengkap</span> - Nama asli user</li>
+                    <li><span class="font-semibold text-slate-800">Email</span> - Format email valid</li>
+                    <li><span class="font-semibold text-slate-800">No. HP</span> - Nomor telepon aktif</li>
+                    <li><span class="font-semibold text-slate-800">Alamat</span> - Alamat lengkap</li>
+                </ul>
+                <div class="mt-3 p-3 bg-green-50 rounded-lg text-xs text-green-700">
+                    <i class="fas fa-lightbulb mr-1"></i> <b>Tips:</b> User bisa diaktifkan/nonaktifkan kapan saja
+                </div>
+            </div>
+
+            <!-- Panduan Pengaturan -->
+            <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <h3 class="font-bold text-purple-600 text-lg mb-3">
+                    <i class="fas fa-cog mr-2"></i> Panduan Pengaturan
+                </h3>
+                <ul class="space-y-2 text-sm text-slate-600">
+                    <li><span class="font-semibold text-slate-800">Nama Toko</span> - Nama bisnis Anda</li>
+                    <li><span class="font-semibold text-slate-800">Tagline</span> - Slogan toko</li>
+                    <li><span class="font-semibold text-slate-800">Telegram Dev</span> - Username untuk notifikasi</li>
+                    <li><span class="font-semibold text-slate-800">DANA</span> - Nomor dan nama akun</li>
+                    <li><span class="font-semibold text-slate-800">QRIS</span> - URL gambar QRIS</li>
+                    <li><span class="font-semibold text-slate-800">Foto Profil</span> - URL foto toko</li>
+                </ul>
+                <div class="mt-3 p-3 bg-purple-50 rounded-lg text-xs text-purple-700">
+                    <i class="fas fa-lightbulb mr-1"></i> <b>Tips:</b> Ganti password developer secara rutin
+                </div>
+            </div>
+
+            <!-- Panduan Order -->
+            <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <h3 class="font-bold text-orange-600 text-lg mb-3">
+                    <i class="fas fa-shopping-cart mr-2"></i> Panduan Order
+                </h3>
+                <ul class="space-y-2 text-sm text-slate-600">
+                    <li><span class="font-semibold text-slate-800">Step 1</span> - Pilih paket yang diinginkan</li>
+                    <li><span class="font-semibold text-slate-800">Step 2</span> - Isi username panel</li>
+                    <li><span class="font-semibold text-slate-800">Step 3</span> - Pilih metode pembayaran</li>
+                    <li><span class="font-semibold text-slate-800">Step 4</span> - Upload bukti transfer</li>
+                    <li><span class="font-semibold text-slate-800">Step 5</span> - Kirim ke developer</li>
+                    <li><span class="font-semibold text-slate-800">Step 6</span> - Tunggu konfirmasi</li>
+                </ul>
+                <div class="mt-3 p-3 bg-orange-50 rounded-lg text-xs text-orange-700">
+                    <i class="fas fa-lightbulb mr-1"></i> <b>Tips:</b> Pastikan bukti transfer jelas terbaca
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CHECKOUT MODAL -->
+    <div id="checkoutModal" class="fixed inset-0 bg-black/60 modal-overlay hidden items-center justify-center p-4 z-50">
+        <div class="modal-content">
+            <button onclick="closeCheckoutModal()" class="float-right text-slate-400 hover:text-slate-900 text-xl">✕</button>
+            <h3 class="text-xl font-bold border-b border-slate-200 pb-3">📦 Detail Pesanan</h3>
+            
+            <form id="orderForm" class="mt-4 space-y-4">
+                <input type="hidden" id="selectedProductId">
+                
+                <div>
+                    <label>Username Panel Kamu</label>
+                    <input type="text" id="buyerUsername" required placeholder="contoh: rexxuser">
+                    <p class="text-[9px] text-slate-400 mt-1">* Username akan digunakan untuk login panel</p>
+                </div>
+
+                <div>
+                    <label>Pilih Metode Pembayaran</label>
+                    <select id="paymentMethod" onchange="togglePaymentDetails()">
+                        <option value="QRIS">QRIS All Payment</option>
+                        <option value="DANA">Nomor DANA</option>
+                    </select>
+                </div>
+
+                <div id="paymentDetailBox" class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-center">
+                    <p class="text-xs text-slate-500 mb-3">Scan QRIS / Transfer untuk membayar:</p>
+                    
+                    <div id="qrisDetail" class="flex flex-col items-center justify-center">
+                        <img id="displayQrisImg" src="https://via.placeholder.com/200x200?text=Scan+QRIS" alt="QRIS Code" class="w-48 h-48 rounded-lg border border-slate-200 object-cover">
+                        <p class="text-[11px] text-slate-400 mt-2">Dukungan: BCA, GoPay, OVO, DANA, ShopeePay</p>
+                    </div>
+
+                    <div id="danaDetail" class="hidden py-4">
+                        <p id="displayDanaNumber" class="font-mono text-xl font-bold text-blue-600">08XXXXXXXXXX</p>
+                        <p id="displayDanaName" class="text-xs text-slate-400 mt-1">a.n REXX MARKET</p>
+                    </div>
+                </div>
+
+                <div>
+                    <label>Upload Bukti Transfer</label>
+                    <input type="file" id="proofFile" accept="image/*" required class="file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:bg-blue-600 file:text-white hover:file:bg-blue-700">
+                    <p id="fileNameDisplay" class="text-[10px] text-slate-400 mt-1"></p>
+                </div>
+
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="closeCheckoutModal()" class="w-1/2 bg-slate-100 hover:bg-slate-200 py-3 rounded-xl text-xs font-semibold text-slate-700">Batal</button>
+                    <button type="submit" id="btnSubmit" class="w-1/2 btn-primary py-3 rounded-xl text-xs font-semibold">Kirim ke Developer 💬</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- STATUS MODAL -->
+    <div id="statusModal" class="fixed inset-0 bg-black/60 modal-overlay hidden items-center justify-center p-4 z-50">
+        <div class="modal-content text-center space-y-4">
+            <div class="text-5xl">✅</div>
+            <h3 class="text-xl font-bold text-slate-900">Pesanan Terkirim!</h3>
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-left space-y-2 text-sm text-slate-600">
+                <p>Silakan lanjutkan chat ke Developer untuk konfirmasi.</p>
+            </div>
+            <div id="statusAction" class="pt-2">
+                <button id="statusToChat" class="w-full btn-primary py-3 rounded-xl text-sm font-semibold">
+                    💬 Chat Developer Sekarang
+                </button>
+            </div>
+            <button onclick="closeStatusModal()" class="text-xs text-slate-400 hover:text-slate-600 mt-2">Tutup</button>
+        </div>
+    </div>
+
+    <!-- DEVELOPER MODAL -->
+    <div id="devModal" class="fixed inset-0 bg-black/60 modal-overlay hidden items-center justify-center p-4 z-50">
+        <div class="bg-white border border-slate-200 rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+                <h3 class="text-lg font-bold text-slate-900">⚙️ Developer Panel</h3>
+                <button id="closeDev" class="text-slate-400 hover:text-slate-900 text-xl">✕</button>
+            </div>
+            
+            <!-- Tab Navigation -->
+            <div class="dev-tab">
+                <button class="active" data-tab="tab-products"><i class="fas fa-box mr-1"></i> Produk</button>
+                <button data-tab="tab-users"><i class="fas fa-users mr-1"></i> Pelanggan</button>
+                <button data-tab="tab-settings"><i class="fas fa-cog mr-1"></i> Pengaturan</button>
+                <button data-tab="tab-guide"><i class="fas fa-book mr-1"></i> Panduan</button>
+            </div>
+
+            <!-- Tab Products -->
+            <div id="tab-products" class="dev-panel active">
+                <div class="settings-section">
+                    <p class="font-bold text-blue-600">📦 KELOLA PRODUK</p>
+                    <p class="text-slate-400 text-xs">15 produk tersedia - Spesifikasi: RAM (GB) | DISK (GB) | CPU (%)</p>
+                    <div class="border-b border-slate-200 pb-3 mt-2">
+                        <p class="text-slate-700 font-semibold">Tambah Produk:</p>
+                        <div class="grid grid-cols-2 gap-2 mt-1">
+                            <input type="text" id="new-prod-name" placeholder="Nama Produk" class="bg-slate-50 border border-slate-200 rounded p-2 text-slate-900">
+                            <input type="text" id="new-prod-price" placeholder="Harga" class="bg-slate-50 border border-slate-200 rounded p-2 text-slate-900">
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 mt-1">
+                            <input type="text" id="new-prod-ram" placeholder="RAM (GB)" class="bg-slate-50 border border-slate-200 rounded p-2 text-slate-900">
+                            <input type="text" id="new-prod-disk" placeholder="DISK (GB)" class="bg-slate-50 border border-slate-200 rounded p-2 text-slate-900">
+                            <input type="text" id="new-prod-cpu" placeholder="CPU (%)" class="bg-slate-50 border border-slate-200 rounded p-2 text-slate-900">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 mt-1">
+                            <input type="text" id="new-prod-desc" placeholder="Deskripsi" class="bg-slate-50 border border-slate-200 rounded p-2 text-slate-900">
+                            <select id="new-prod-category" class="bg-slate-50 border border-slate-200 rounded p-2 text-slate-900">
+                                <option value="Starter">Starter</option>
+                                <option value="Business">Business</option>
+                                <option value="Premium">Premium</option>
+                                <option value="Umum">Umum</option>
+                            </select>
+                        </div>
+                        <button id="addProductBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg mt-2">+ Tambah Produk</button>
+                    </div>
+                    <div class="mt-2">
+                        <p class="text-slate-700 font-semibold mb-2">Daftar Produk (<span id="productCount">0</span>):</p>
+                        <div id="devProductList" class="space-y-2 max-h-48 overflow-y-auto"></div>
+                    </div>
+                    <button id="saveProductsBtn" class="btn-save-individual mt-2">💾 Simpan Produk</button>
+                </div>
+            </div>
+
+            <!-- Tab Users -->
+            <div id="tab-users" class="dev-panel">
+                <div class="settings-section">
+                    <p class="font-bold text-green-600">👥 DATABASE PELANGGAN</p>
+                    <div id="userStats" class="user-stats">
+                        <div class="stat-card">
+                            <div class="number" id="totalUsers">0</div>
+                            <div class="label">Total Pelanggan</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="number" id="newUsers">0</div>
+                            <div class="label">Baru Minggu Ini</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="number" id="activeUsers">0</div>
+                            <div class="label">Aktif</div>
+                        </div>
+                    </div>
+                    <div id="userListContainer" class="max-h-48 overflow-y-auto border border-slate-200 rounded-lg p-2 bg-slate-50">
+                        <p class="text-slate-400 text-xs text-center py-4" id="emptyUserMsg">Belum ada pelanggan terdaftar</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Settings -->
+            <div id="tab-settings" class="dev-panel">
+                <div class="settings-section">
+                    <p class="font-bold text-purple-600">⚙️ PENGATURAN</p>
+                    
+                    <div class="space-y-3">
+                        <div>
+                            <label class="text-slate-700 font-semibold text-sm">Nama Toko</label>
+                            <input type="text" id="settingStoreName" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-slate-900">
+                        </div>
+                        <div>
+                            <label class="text-slate-700 font-semibold text-sm">Tagline</label>
+                            <input type="text" id="settingTagline" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-slate-900">
+                        </div>
+                        <div>
+                            <label class="text-slate-700 font-semibold text-sm">Username Telegram Developer</label>
+                            <input type="text" id="settingDevTelegram" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-slate-900">
+                        </div>
+                        <div>
+                            <label class="text-slate-700 font-semibold text-sm">Nomor DANA</label>
+                            <input type="text" id="settingDanaNumber" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-slate-900">
+                        </div>
+                        <div>
+                            <label class="text-slate-700 font-semibold text-sm">Nama DANA</label>
+                            <input type="text" id="settingDanaName" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-slate-900">
+                        </div>
+                        <div>
+                            <label class="text-slate-700 font-semibold text-sm">URL QRIS</label>
+                            <input type="text" id="settingQrisUrl" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-slate-900">
+                        </div>
+                        <div>
+                            <label class="text-slate-700 font-semibold text-sm">URL Foto Profil</label>
+                            <input type="text" id="settingProfilePhoto" class="w-full bg-slate-50 border border-slate-200 rounded p-2 text-slate-900">
+                        </div>
+                        
+                        <!-- Ganti Password -->
+                        <div class="password-section">
+                            <div class="title">
+                                <i class="fas fa-key"></i> Ganti Password Developer
+                            </div>
+                            <p class="text-xs text-red-600 mb-3">
+                                <i class="fas fa-exclamation-triangle mr-1"></i> 
+                                Password saat ini: <strong id="currentPasswordDisplay">admin</strong>
+                            </p>
+                            <div class="space-y-2">
+                                <div>
+                                    <label class="text-xs font-semibold text-slate-600">Password Lama</label>
+                                    <input type="password" id="oldDevPassword" placeholder="Masukkan password lama" class="border-red-200">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-semibold text-slate-600">Password Baru</label>
+                                    <input type="password" id="newDevPassword" placeholder="Masukkan password baru (min 4 karakter)" class="border-red-200">
+                                    <div class="password-hint"><i class="fas fa-info-circle"></i> Minimal 4 karakter</div>
+                                </div>
+                                <div>
+                                    <label class="text-xs font-semibold text-slate-600">Konfirmasi Password</label>
+                                    <input type="password" id="confirmDevPassword" placeholder="Ulangi password baru" class="border-red-200">
+                                </div>
+                                <button id="changePasswordBtn" class="btn-change-password">
+                                    <i class="fas fa-save mr-2"></i> Ganti Password
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <button id="saveSettingsBtn" class="btn-save-individual mt-2">💾 Simpan Pengaturan</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Guide -->
+            <div id="tab-guide" class="dev-panel">
+                <div class="settings-section">
+                    <p class="font-bold text-orange-600">📖 PANDUAN CARA ISI</p>
+                    
+                    <div class="space-y-4 text-sm">
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h4 class="font-bold text-blue-700 mb-2">📦 Produk</h4>
+                            <ul class="space-y-1 text-slate-600 text-xs">
+                                <li>• <b>Nama:</b> Nama paket (contoh: Paket Starter 1)</li>
+                                <li>• <b>Harga:</b> Format Rp X.XXX (contoh: Rp 5.000)</li>
+                                <li>• <b>RAM:</b> Kapasitas RAM dalam GB</li>
+                                <li>• <b>DISK:</b> Kapasitas penyimpanan dalam GB</li>
+                                <li>• <b>CPU:</b> Alokasi CPU dalam persen (%)</li>
+                                <li>• <b>Kategori:</b> Starter / Business / Premium</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <h4 class="font-bold text-green-700 mb-2">👥 Pelanggan</h4>
+                            <ul class="space-y-1 text-slate-600 text-xs">
+                                <li>• <b>Username:</b> Nama unik untuk login (min 3 karakter)</li>
+                                <li>• <b>Password:</b> Minimal 4 karakter</li>
+                                <li>• <b>Nama Lengkap:</b> Nama asli user</li>
+                                <li>• <b>Email:</b> Format email valid</li>
+                                <li>• <b>No. HP:</b> Nomor telepon aktif</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                            <h4 class="font-bold text-purple-700 mb-2">⚙️ Pengaturan</h4>
+                            <ul class="space-y-1 text-slate-600 text-xs">
+                                <li>• <b>Nama Toko:</b> Nama bisnis Anda</li>
+                                <li>• <b>Tagline:</b> Slogan toko</li>
+                                <li>• <b>Telegram Dev:</b> Username untuk notifikasi</li>
+                                <li>• <b>DANA:</b> Nomor dan nama akun</li>
+                                <li>• <b>QRIS:</b> URL gambar QRIS</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                            <h4 class="font-bold text-red-700 mb-2">🔑 Ganti Password</h4>
+                            <ul class="space-y-1 text-slate-600 text-xs">
+                                <li>• Masukkan <b>Password Lama</b> (default: admin)</li>
+                                <li>• Masukkan <b>Password Baru</b> (min 4 karakter)</li>
+                                <li>• <b>Konfirmasi Password</b> (ulangi password baru)</li>
+                                <li>• Klik <b>"Ganti Password"</b> untuk menyimpan</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 border border-blue-200 p-3 rounded-lg mt-4">
+                <p class="text-blue-700 text-xs">💡 <b>Alur Order:</b> Pelanggan pilih produk → isi username → upload bukti → chat developer dengan pesan otomatis.</p>
+            </div>
+
+            <div class="flex gap-2 mt-6">
+                <button id="closeDev2" class="w-full bg-slate-100 hover:bg-slate-200 py-3 rounded-xl text-sm font-semibold text-slate-700">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 py-6 px-6 text-center text-sm text-slate-500">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-center gap-6 font-semibold text-slate-400 mb-3">
+                <a href="#" id="footerDevAccess" class="hover:text-blue-600 transition">🔒 Developer</a>
+            </div>
+            <p>&copy; 2026 <span id="footerStoreName">REXX MARKET HOSTING</span>. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- ============================================================ -->
+    <!-- MAIN JAVASCRIPT - LOGIC UTAMA -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        // GLOBAL STATE
+        // ============================================================
+        let config = {};
+        let products = [];
+        let users = [];
+        let lastOrderData = null;
+
+        // ============================================================
+        // TOAST NOTIFICATION
+        // ============================================================
+        function showToast(msg, type = 'info') {
+            const old = document.querySelector('.toast');
+            if (old) old.remove();
+            const t = document.createElement('div');
+            t.className = `toast toast-${type}`;
+            t.textContent = msg;
+            document.body.appendChild(t);
+            setTimeout(() => { 
+                t.style.opacity = '0'; 
+                t.style.transform = 'translateX(50px)'; 
+                setTimeout(() => t.remove(), 400); 
+            }, 4000);
+        }
+
+        // Expose ke window agar bisa dipanggil dari file lain
+        window.showToast = showToast;
+
+        // ============================================================
+        // LOAD DATA DARI FILE TERPISAH
+        // ============================================================
+        function loadAllData() {
+            try {
+                // Load dari file terpisah
+                if (typeof loadDevConfig === 'function') {
+                    config = loadDevConfig();
+                }
+                if (typeof loadProducts === 'function') {
+                    products = loadProducts();
+                }
+                if (typeof loadUsers === 'function') {
+                    users = loadUsers();
+                }
+                
+                console.log('✅ Data loaded successfully!');
+                console.log(`📦 ${products.length} products`);
+                console.log(`👥 ${users.length} users`);
+            } catch (e) {
+                console.error('Error loading data:', e);
+                // Fallback ke data default
+                products = DEFAULT_PRODUCTS || [];
+                users = DEMO_USERS || [];
+            }
+        }
+
+        // ============================================================
+        // UPDATE STORE DISPLAY
+        // ============================================================
+        function updateStoreDisplay() {
+            const nameEl = document.getElementById('headerStoreName');
+            const footerEl = document.getElementById('footerStoreName');
+            
+            const storeName = config?.storeName || 'REXX MARKET HOSTING';
+            
+            if (nameEl) {
+                const parts = storeName.split(' ');
+                if (parts.length > 1) {
+                    nameEl.innerHTML = parts[0] + ' <span style="color:#2563eb;">' + parts.slice(1).join(' ') + '</span>';
+                } else {
+                    nameEl.textContent = storeName;
+                }
+            }
+            if (footerEl) footerEl.textContent = storeName;
+
+            const taglineEl = document.getElementById('headerTagline');
+            if (taglineEl) taglineEl.textContent = config?.storeTagline || 'Hosting • Panel Provider';
+
+            const profileEl = document.getElementById('headerProfilePhoto');
+            const colors = config?.profileColors || ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd'];
+            const gradient = `linear-gradient(135deg, ${colors.join(', ')})`;
+            
+            if (profileEl) {
+                if (config?.profilePhoto) {
+                    profileEl.innerHTML = `<img src="${config.profilePhoto}" alt="Profile" onerror="this.style.display='none';this.parentElement.textContent='${config?.storeInitial || 'R'}';">`;
+                } else {
+                    profileEl.style.background = gradient;
+                    profileEl.textContent = config?.storeInitial || 'R';
+                }
+            }
+        }
+
+        // ============================================================
+        // RENDER MARQUEE
+        // ============================================================
+        function renderMarquee() {
+            const track = document.getElementById('marqueeTrack');
+            if (!track) return;
+            
+            const items = config?.marqueeItems || [
+                '🚀 Deploy Cepat & Stabil',
+                '💳 Bayar Pakai QRIS/DANA',
+                '⚡ Performa Tinggi 99.9% Uptime',
+                '🛡️ Free DDOS Protection',
+                '💬 Support 24/7'
+            ];
+            
+            const allItems = [...items, ...items];
+            
+            track.innerHTML = allItems.map(item => `
+                <div class="marquee-item">
+                    <i class="fas fa-circle" style="font-size: 6px;"></i>
+                    <span>${item}</span>
+                    <i class="fas fa-circle" style="font-size: 6px; opacity: 0.3;"></i>
+                </div>
+            `).join('');
+        }
+
+        // ============================================================
+        // RENDER PRODUCTS (15 Produk)
+        // ============================================================
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            
+            const productList = products.length > 0 ? products : DEFAULT_PRODUCTS;
+            
+            if (!productList || productList.length === 0) {
+                grid.innerHTML = '<p class="col-span-full text-center text-slate-500">Belum ada produk.</p>';
+                return;
+            }
+            
+            productList.forEach(p => {
+                const categoryClass = p.category ? `category-${p.category.toLowerCase()}` : 'category-umum';
+                
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="badge-panel">PANEL</div>
+                            <div class="text-lg font-bold text-slate-900 mt-1">${p.name}</div>
+                            ${p.category ? `<span class="product-category-badge ${categoryClass}">${p.category}</span>` : ''}
+                        </div>
+                        <div class="badge-ready">READY</div>
+                    </div>
+                    <div class="mt-3 space-y-1.5">
+                        <div class="spec-item"><i class="fas fa-microchip"></i><span class="label">RAM</span><span class="value">${p.ram || '0'} GB</span></div>
+                        <div class="spec-item"><i class="fas fa-hdd"></i><span class="label">DISK</span><span class="value">${p.disk || '0'} GB</span></div>
+                        <div class="spec-item"><i class="fas fa-server"></i><span class="label">CPU</span><span class="value">${p.cpu || '0'}%</span></div>
+                    </div>
+                    ${p.desc ? `<div class="text-xs text-slate-500 mt-2 line-clamp-2">${p.desc}</div>` : ''}
+                    <div class="mt-3 flex justify-between items-center pt-2 border-t border-slate-100">
+                        <span class="price-tag">${p.price || 'Rp 0'}</span>
+                        <span class="text-[9px] text-emerald-500 font-medium">● Ready</span>
+                    </div>
+                    <button class="checkout-btn mt-3" data-id="${p.id}">
+                        <i class="fas fa-shopping-cart"></i> Beli Sekarang
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+            
+            document.querySelectorAll('.checkout-btn').forEach(b => {
+                b.addEventListener('click', function() { 
+                    const id = this.dataset.id;
+                    if (id) checkout(id);
+                });
+            });
+        }
+
+        // ============================================================
+        // RENDER DEV PRODUCT LIST
+        // ============================================================
+        function renderDevProductList() {
+            const list = document.getElementById('devProductList');
+            const count = document.getElementById('productCount');
+            if (!list) return;
+            
+            const productList = products.length > 0 ? products : DEFAULT_PRODUCTS;
+            
+            if (count) count.textContent = productList.length;
+            
+            list.innerHTML = '';
+            if (!productList || productList.length === 0) {
+                list.innerHTML = '<p class="text-slate-500 text-xs">Belum ada produk.</p>';
+                return;
+            }
+            
+            productList.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center bg-slate-50 border border-slate-200 p-2 rounded-lg text-xs';
+                div.innerHTML = `
+                    <div>
+                        <p class="font-bold text-slate-900">${p.name}</p>
+                        <p class="text-slate-500">${p.price} | RAM: ${p.ram}GB | DISK: ${p.disk}GB | CPU: ${p.cpu}%</p>
+                        ${p.category ? `<span class="text-[9px] text-blue-500">${p.category}</span>` : ''}
+                    </div>
+                    <button class="delete-product-btn bg-red-50 text-red-500 hover:bg-red-500 hover:text-white px-2 py-1 rounded text-[10px] transition" data-id="${p.id}">Hapus</button>
+                `;
+                list.appendChild(div);
+            });
+            
+            document.querySelectorAll('.delete-product-btn').forEach(b => {
+                b.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    if (id) deleteProduct(id);
+                });
+            });
+        }
+
+        // ============================================================
+        // RENDER USER DATABASE
+        // ============================================================
+        function renderUserDatabase() {
+            const container = document.getElementById('userListContainer');
+            const totalEl = document.getElementById('totalUsers');
+            const newEl = document.getElementById('newUsers');
+            const activeEl = document.getElementById('activeUsers');
+            
+            if (!container) return;
+            
+            const userList = users.length > 0 ? users : DEMO_USERS;
+            
+            const total = userList.length;
+            const weekAgo = new Date();
+            weekAgo.setDate(weekAgo.getDate() - 7);
+            const newUsers = userList.filter(u => new Date(u.registeredAt) > weekAgo).length;
+            const activeUsers = userList.filter(u => u.isActive !== false).length;
+            
+            if (totalEl) totalEl.textContent = total;
+            if (newEl) newEl.textContent = newUsers;
+            if (activeEl) activeEl.textContent = activeUsers;
+            
+            if (userList.length === 0) {
+                container.innerHTML = `<p class="text-slate-400 text-xs text-center py-4">Belum ada pelanggan terdaftar</p>`;
+                return;
+            }
+            
+            const sorted = [...userList].sort((a, b) => new Date(b.registeredAt) - new Date(a.registeredAt));
+            
+            container.innerHTML = sorted.map(u => `
+                <div class="user-list-item">
+                    <div class="user-info">
+                        <span class="name"><i class="fas fa-user-circle text-blue-500 mr-1"></i>${u.fullname || u.username}</span>
+                        <span class="detail">@${u.username} • Bergabung: ${new Date(u.registeredAt).toLocaleDateString('id-ID')}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="user-badge">${u.isActive !== false ? 'Aktif' : 'Nonaktif'}</span>
+                        <button class="toggle-user-btn text-xs text-slate-400 hover:text-blue-600 transition" data-username="${u.username}">
+                            <i class="fas ${u.isActive !== false ? 'fa-toggle-on text-blue-500' : 'fa-toggle-off text-slate-300'}"></i>
+                        </button>
+                        <button class="delete-user-btn text-xs text-red-400 hover:text-red-600 transition" data-username="${u.username}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.querySelectorAll('.toggle-user-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const username = this.dataset.username;
+                    toggleUserStatus(username);
+                });
+            });
+            
+            document.querySelectorAll('.delete-user-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const username = this.dataset.username;
+                    if (confirm(`Yakin hapus user "${username}"?`)) {
+                        deleteUser(username);
+                    }
+                });
+            });
+        }
+
+        function toggleUserStatus(username) {
+            const result = toggleUserStatusFn(username);
+            if (result.success) {
+                users = loadUsers();
+                renderUserDatabase();
+                showToast(result.message, 'info');
+            }
+        }
+
+        function deleteUser(username) {
+            const result = deleteUserFn(username);
+            if (result.success) {
+                users = loadUsers();
+                renderUserDatabase();
+                showToast(result.message, 'warning');
+            }
+        }
+
+        // ============================================================
+        // CHECKOUT
+        // ============================================================
+        function checkout(productId) {
+            document.getElementById('selectedProductId').value = productId;
+            document.getElementById('displayQrisImg').src = config?.qrisUrl || 'https://via.placeholder.com/200x200?text=Scan+QRIS';
+            document.getElementById('displayDanaNumber').textContent = config?.danaNumber || '082116896006';
+            document.getElementById('displayDanaName').textContent = "a.n " + (config?.danaName || 'REXX MARKET');
+            document.getElementById('checkoutModal').classList.remove('hidden');
+            document.getElementById('checkoutModal').classList.add('flex');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').classList.add('hidden');
+            document.getElementById('checkoutModal').classList.remove('flex');
+        }
+
+        function togglePaymentDetails() {
+            const method = document.getElementById('paymentMethod').value;
+            document.getElementById('qrisDetail').classList.toggle('hidden', method !== 'QRIS');
+            document.getElementById('danaDetail').classList.toggle('hidden', method !== 'DANA');
+        }
+
+        // ============================================================
+        // STATUS MODAL
+        // ============================================================
+        function openStatusModal(chatUrl) {
+            const modal = document.getElementById('statusModal');
+            const chatBtn = document.getElementById('statusToChat');
+            if (chatBtn) {
+                chatBtn.onclick = function() {
+                    window.open(chatUrl, '_blank');
+                };
+            }
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeStatusModal() {
+            const modal = document.getElementById('statusModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        // ============================================================
+        // SUBMIT ORDER
+        // ============================================================
+        function submitOrder(e) {
+            e.preventDefault();
+
+            const btn = document.getElementById('btnSubmit');
+            btn.textContent = 'Mengirim...';
+            btn.disabled = true;
+
+            const prodId = document.getElementById('selectedProductId').value;
+            const product = products.find(p => p.id === prodId) || DEFAULT_PRODUCTS.find(p => p.id === prodId);
+            
+            if (!product) {
+                alert('Produk tidak ditemukan!');
+                btn.disabled = false;
+                btn.textContent = 'Kirim ke Developer 💬';
+                return;
+            }
+
+            const username = document.getElementById('buyerUsername').value.trim();
+            const method = document.getElementById('paymentMethod').value;
+            const fileInput = document.getElementById('proofFile');
+            const file = fileInput?.files[0];
+
+            if (!username) {
+                alert('Masukkan username panel!');
+                btn.disabled = false;
+                btn.textContent = 'Kirim ke Developer 💬';
+                document.getElementById('buyerUsername').focus();
+                return;
+            }
+
+            if (!file) {
+                alert('Upload bukti transfer!');
+                btn.disabled = false;
+                btn.textContent = 'Kirim ke Developer 💬';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const proofBase64 = e.target.result;
+                const devUsername = config?.devTelegram || 'rexnothuman';
+                
+                const message = `🛒 *ORDER PANEL - ${config?.storeName || 'REXX MARKET HOSTING'}*\n\n` +
+                                `📦 *Produk:* ${product.name}\n` +
+                                `💰 *Harga:* ${product.price}\n` +
+                                `📊 *Spesifikasi:* RAM ${product.ram}GB | DISK ${product.disk}GB | CPU ${product.cpu}%\n` +
+                                `👤 *Username:* ${username}\n` +
+                                `💳 *Metode:* ${method}\n\n` +
+                                `📸 *Bukti Transfer:* (terlampir)\n\n` +
+                                `---\n` +
+                                `_Silakan cek bukti transfer di atas. Tunggu konfirmasi dari developer._`;
+
+                const encodedMessage = encodeURIComponent(message);
+                const chatUrl = `https://t.me/${devUsername}?text=${encodedMessage}`;
+
+                lastOrderData = {
+                    product: product.name,
+                    price: product.price,
+                    ram: product.ram,
+                    disk: product.disk,
+                    cpu: product.cpu,
+                    username: username,
+                    method: method,
+                    date: new Date().toLocaleString(),
+                    proof: proofBase64
+                };
+
+                closeCheckoutModal();
+                document.getElementById('orderForm').reset();
+                document.getElementById('fileNameDisplay').textContent = '';
+                openStatusModal(chatUrl);
+                showToast('✅ Buka chat Telegram untuk kirim pesan!', 'success');
+
+                btn.textContent = 'Kirim ke Developer 💬';
+                btn.disabled = false;
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        // ============================================================
+        // DEVELOPER PANEL
+        // ============================================================
+        function promptDevAccess() {
+            const pwd = prompt('Masukkan Password Developer (default: admin):');
+            if (pwd === null) return;
+            const devPassword = config?.devPassword || 'admin';
+            if (pwd === devPassword) {
+                openDevModal();
+            } else {
+                alert('Password salah!');
+            }
+        }
+
+        function openDevModal() {
+            // Reload data terbaru
+            if (typeof loadProducts === 'function') products = loadProducts();
+            if (typeof loadUsers === 'function') users = loadUsers();
+            
+            renderDevProductList();
+            renderUserDatabase();
+            loadSettingsToForm();
+            updatePasswordDisplay();
+            
+            document.getElementById('devModal').classList.remove('hidden');
+            document.getElementById('devModal').classList.add('flex');
+        }
+
+        function closeDevModal() {
+            document.getElementById('devModal').classList.add('hidden');
+            document.getElementById('devModal').classList.remove('flex');
+        }
+
+        function loadSettingsToForm() {
+            document.getElementById('settingStoreName').value = config?.storeName || '';
+            document.getElementById('settingTagline').value = config?.storeTagline || '';
+            document.getElementById('settingDevTelegram').value = config?.devTelegram || '';
+            document.getElementById('settingDanaNumber').value = config?.danaNumber || '';
+            document.getElementById('settingDanaName').value = config?.danaName || '';
+            document.getElementById('settingQrisUrl').value = config?.qrisUrl || '';
+            document.getElementById('settingProfilePhoto').value = config?.profilePhoto || '';
+        }
+
+        function updatePasswordDisplay() {
+            document.getElementById('currentPasswordDisplay').textContent = config?.devPassword || 'admin';
+        }
+
+        function saveSettings() {
+            const settings = {
+                storeName: document.getElementById('settingStoreName').value.trim(),
+                storeTagline: document.getElementById('settingTagline').value.trim(),
+                devTelegram: document.getElementById('settingDevTelegram').value.trim(),
+                danaNumber: document.getElementById('settingDanaNumber').value.trim(),
+                danaName: document.getElementById('settingDanaName').value.trim(),
+                qrisUrl: document.getElementById('settingQrisUrl').value.trim(),
+                profilePhoto: document.getElementById('settingProfilePhoto').value.trim()
+            };
+            
+            // Update config
+            config = { ...config, ...settings };
+            
+            if (typeof saveDevConfig === 'function') {
+                saveDevConfig(config);
+            }
+            
+            updateStoreDisplay();
+            renderMarquee();
+            updatePasswordDisplay();
+            showToast('✅ Pengaturan berhasil disimpan!', 'success');
+        }
+
+        // ============================================================
+        // CHANGE DEVELOPER PASSWORD
+        // ============================================================
+        function changeDevPassword() {
+            const oldPassword = document.getElementById('oldDevPassword').value.trim();
+            const newPassword = document.getElementById('newDevPassword').value.trim();
+            const confirmPassword = document.getElementById('confirmDevPassword').value.trim();
+            const btn = document.getElementById('changePasswordBtn');
+            
+            if (!oldPassword || !newPassword || !confirmPassword) {
+                showToast('❌ Semua field password harus diisi!', 'error');
+                return;
+            }
+            
+            if (oldPassword !== config.devPassword) {
+                showToast('❌ Password lama salah!', 'error');
+                return;
+            }
+            
+            if (newPassword.length < 4) {
+                showToast('❌ Password baru minimal 4 karakter!', 'error');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showToast('❌ Konfirmasi password tidak cocok!', 'error');
+                return;
+            }
+            
+            if (newPassword === oldPassword) {
+                showToast('⚠️ Password baru harus berbeda dari password lama!', 'warning');
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.textContent = 'Mengubah...';
+            
+            setTimeout(() => {
+                config.devPassword = newPassword;
+                
+                if (typeof saveDevConfig === 'function') {
+                    saveDevConfig(config);
+                }
+                
+                updatePasswordDisplay();
+                
+                document.getElementById('oldDevPassword').value = '';
+                document.getElementById('newDevPassword').value = '';
+                document.getElementById('confirmDevPassword').value = '';
+                
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save mr-2"></i> Ganti Password';
+                
+                showToast('✅ Password developer berhasil diubah!', 'success');
+                
+                setTimeout(() => {
+                    if (confirm('Password berhasil diubah! Ingin logout untuk menguji password baru?')) {
+                        closeDevModal();
+                        setTimeout(() => {
+                            promptDevAccess();
+                        }, 500);
+                    }
+                }, 1000);
+            }, 800);
+        }
+
+        // ============================================================
+        // ADD NEW PRODUCT
+        // ============================================================
+        function addNewProduct() {
+            const name = document.getElementById('new-prod-name')?.value.trim();
+            const price = document.getElementById('new-prod-price')?.value.trim();
+            const ram = document.getElementById('new-prod-ram')?.value.trim() || '0';
+            const disk = document.getElementById('new-prod-disk')?.value.trim() || '0';
+            const cpu = document.getElementById('new-prod-cpu')?.value.trim() || '0';
+            const desc = document.getElementById('new-prod-desc')?.value.trim() || '';
+            const category = document.getElementById('new-prod-category')?.value || 'Umum';
+
+            if (!name || !price) { 
+                showToast('❌ Isi nama dan harga!', 'error');
+                return; 
+            }
+            
+            const newProduct = { 
+                id: 'prod-' + Date.now(), 
+                name, 
+                price, 
+                ram, 
+                disk, 
+                cpu,
+                desc,
+                category
+            };
+            
+            products.push(newProduct);
+            
+            if (typeof saveProducts === 'function') {
+                saveProducts(products);
+            }
+            
+            renderDevProductList();
+            renderProducts();
+            
+            document.getElementById('new-prod-name').value = '';
+            document.getElementById('new-prod-price').value = '';
+            document.getElementById('new-prod-ram').value = '';
+            document.getElementById('new-prod-disk').value = '';
+            document.getElementById('new-prod-cpu').value = '';
+            document.getElementById('new-prod-desc').value = '';
+            
+            showToast('✅ Produk ditambahkan!', 'success');
+        }
+
+        function deleteProduct(id) {
+            if (!confirm('Yakin hapus produk ini?')) return;
+            
+            products = products.filter(p => p.id !== id);
+            
+            if (typeof saveProducts === 'function') {
+                saveProducts(products);
+            }
+            
+            renderDevProductList();
+            renderProducts();
+            showToast('🗑️ Produk dihapus!', 'warning');
+        }
+
+        function saveProductSettings() {
+            if (typeof saveProducts === 'function') {
+                saveProducts(products);
+            }
+            renderProducts();
+            renderDevProductList();
+            showToast('✅ Produk tersimpan!', 'success');
+        }
+
+        // ============================================================
+        // WRAPPER FUNCTIONS untuk user management
+        // ============================================================
+        function toggleUserStatusFn(username) {
+            const user = users.find(u => u.username === username);
+            if (!user) return { success: false, message: 'User tidak ditemukan!' };
+            
+            user.isActive = !user.isActive;
+            
+            if (typeof saveUsers === 'function') {
+                saveUsers(users);
+            }
+            
+            return { 
+                success: true, 
+                message: `User ${username} ${user.isActive ? 'diaktifkan' : 'dinonaktifkan'}`
+            };
+        }
+
+        function deleteUserFn(username) {
+            users = users.filter(u => u.username !== username);
+            
+            if (typeof saveUsers === 'function') {
+                saveUsers(users);
+            }
+            
+            return { success: true, message: `User ${username} berhasil dihapus!` };
+        }
+
+        // ============================================================
+        // TAB NAVIGATION
+        // ============================================================
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.dev-tab button');
+            const panelIds = ['tab-products', 'tab-users', 'tab-settings', 'tab-guide'];
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    panelIds.forEach(id => {
+                        const panel = document.getElementById(id);
+                        if (panel) panel.classList.remove('active');
+                    });
+
+                    const tabId = this.dataset.tab;
+                    const panel = document.getElementById(tabId);
+                    if (panel) panel.classList.add('active');
+                });
+            });
+        }
+
+        // ============================================================
+        // SETUP EVENT LISTENERS
+        // ============================================================
+        function setupEventListeners() {
+            document.getElementById('btnDevAccess')?.addEventListener('click', promptDevAccess);
+            document.getElementById('footerDevAccess')?.addEventListener('click', e => { e.preventDefault(); promptDevAccess(); });
+
+            document.getElementById('closeDev')?.addEventListener('click', closeDevModal);
+            document.getElementById('closeDev2')?.addEventListener('click', closeDevModal);
+
+            document.getElementById('saveProductsBtn')?.addEventListener('click', saveProductSettings);
+            document.getElementById('addProductBtn')?.addEventListener('click', addNewProduct);
+            document.getElementById('saveSettingsBtn')?.addEventListener('click', saveSettings);
+            
+            document.getElementById('changePasswordBtn')?.addEventListener('click', changeDevPassword);
+
+            document.getElementById('closeCheckout')?.addEventListener('click', closeCheckoutModal);
+            document.getElementById('paymentMethod')?.addEventListener('change', togglePaymentDetails);
+            document.getElementById('orderForm')?.addEventListener('submit', submitOrder);
+
+            document.getElementById('proofFile')?.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                document.getElementById('fileNameDisplay').textContent = file ? '📎 ' + file.name : '';
+            });
+
+            document.getElementById('statusModal')?.addEventListener('click', function(e) {
+                if (e.target === this) closeStatusModal();
+            });
+
+            document.getElementById('devModal')?.addEventListener('click', function(e) {
+                if (e.target === this) closeDevModal();
+            });
+
+            document.getElementById('confirmDevPassword')?.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    changeDevPassword();
+                }
+            });
+
+            setupTabs();
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        function initApp() {
+            // Load semua data dari file terpisah
+            loadAllData();
+            
+            // Render UI
+            renderProducts();
+            renderMarquee();
+            setupEventListeners();
+            updateStoreDisplay();
+            
+            console.log('🎨 REXX MARKET HOSTING - Complete');
+            console.log(`📦 ${products.length} products loaded`);
+            console.log(`👥 ${users.length} users loaded`);
+            console.log(`🔑 Password Developer: ${config?.devPassword || 'admin'}`);
+            console.log('✅ Semua opsi developer dipisah ke file terpisah');
+        }
+
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
